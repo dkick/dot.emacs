@@ -1,5 +1,6 @@
 ;;; This file has configuration code which is common to both GNU Emacs
-;;; and XEmacs.
+;;; and XEmacs. Or, at least, it used to. I don't use XEmacs anymore
+;;; (2022-12-12)
 
 (exec-path-from-shell-initialize)
 
