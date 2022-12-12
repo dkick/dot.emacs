@@ -22,7 +22,7 @@
 ;(require 'column-marker)
 ;(add-hook 'foo-mode-hook (lambda () (interactive) (column-marker-1 80)))
 (setq-default transient-mark-mode t)
-(set-scroll-bar-mode 'right)
+;(set-scroll-bar-mode 'right)
 
 ;; For some reason, not all of the customization settings for
 ;; whitespace-mode are working per documentation.  This works around
