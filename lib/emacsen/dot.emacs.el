@@ -1,6 +1,6 @@
 ;;; This file has configuration code which is common to both GNU Emacs
 ;;; and XEmacs. Or, at least, it used to. I don't use XEmacs anymore
-;;; (2022-12-12)
+;;; (2022-12-12) and haven't for a long time.
 
 (exec-path-from-shell-initialize)
 
@@ -8,6 +8,7 @@
 (add-to-list 'load-path "~/lib/emacsen/slime")
 
 (require 'cl-lib)
+(require 'clj-config)
 (require 'cmake-mode)
 (require 'flycheck-clj-kondo)
 (require 'slime)
@@ -23,8 +24,11 @@
 
 ;(require 'column-marker)
 ;(add-hook 'foo-mode-hook (lambda () (interactive) (column-marker-1 80)))
-(setq-default transient-mark-mode t)
 ;(set-scroll-bar-mode 'right)
+
+(setq-default column-number-mode t)
+(setq-default transient-mark-mode t)
+(setq-default comint-process-echoes t)
 
 ;; For some reason, not all of the customization settings for
 ;; whitespace-mode are working per documentation.  This works around
