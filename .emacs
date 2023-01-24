@@ -1,12 +1,23 @@
-;(setq mac-command-modifier 'alt mac-option-modifier 'meta)
-;(require 'redo+)
-;(require 'mac-key-mode)
-;(mac-key-mode 1)
+;; overriding image.el function image-type-available-p
+;;
+;; https://emacs.stackexchange.com/a/74801
+(defun image-type-available-p (type)
+  "Return t if image type TYPE is available.
+Image types are symbols like `xbm' or `jpeg'."
+  (if (eq 'svg type)
+      nil
+    (and (fboundp 'init-image-library)
+	 (init-image-library type))))
 
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Comment/uncomment this line to enable MELPA Stable if desired.  See
+;; `package-archive-priorities` and `package-pinned-packages`. Most
+;; users will not need or want to do this.
+;;
+;;(add-to-list 'package-archives
+;;             '("melpa-stable" . "https://stable.melpa.org/packages/")
+;;             t)
 (package-initialize)
 
 (custom-set-variables
@@ -14,29 +25,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(column-number-mode t)
- '(elpy-rpc-python-command "python3")
- '(exec-path-from-shell-variables '("PATH" "MANPATH"))
- '(indent-tabs-mode nil)
- '(inferior-lisp-program "/usr/local/bin/sbcl --noinform" t)
- '(js-indent-level 2)
- '(line-number-mode t)
- '(make-backup-files nil)
- '(package-archives
-   '(("gnu" . "http://elpa.gnu.org/packages/")
-     ("melpa" . "http://melpa.org/packages/")))
  '(package-selected-packages
-   '(terraform-mode lsp-python-ms lsp-mode elpy cl-lib yaml-mode groovy-mode tide smartparens paredit company exec-path-from-shell cider projectile scala-mode sbt-mode slime hydra))
- '(python-shell-interpreter "python")
- '(require-final-newline 'ask)
- '(show-paren-mode t)
- '(uniquify-buffer-name-style 'reverse nil (uniquify))
- '(whitespace-check-indent-whitespace nil t)
- '(whitespace-check-leading-whitespace nil)
- '(whitespace-display-in-modeline t)
- '(whitespace-display-spaces-in-color t)
- '(whitespace-global-mode t)
- '(whitespace-silent t))
+   '(company lsp-mode flycheck-clj-kondo flycheck-clojure clj-refactor yaml-mode yaml smartparens slime exec-path-from-shell evil cider))
+ '(uniquify-buffer-name-style 'post-forward nil (uniquify)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -44,10 +35,6 @@
  ;; If there is more than one, they won't work right.
  )
 
-(load "~/lib/emacsen/dot.emacs")
-
-(put 'downcase-region 'disabled nil)
+(load-file "~/lib/emacsen/dot.emacs.el")
 
 (put 'narrow-to-region 'disabled nil)
-
-(put 'upcase-region 'disabled nil)
