@@ -1,40 +1,110 @@
-;; overriding image.el function image-type-available-p
-;;
-;; https://emacs.stackexchange.com/a/74801
-(defun image-type-available-p (type)
-  "Return t if image type TYPE is available.
-Image types are symbols like `xbm' or `jpeg'."
-  (if (eq 'svg type)
-      nil
-    (and (fboundp 'init-image-library)
-	 (init-image-library type))))
-
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;; Comment/uncomment this line to enable MELPA Stable if desired.  See
-;; `package-archive-priorities` and `package-pinned-packages`. Most
-;; users will not need or want to do this.
-;;
-;;(add-to-list 'package-archives
-;;             '("melpa-stable" . "https://stable.melpa.org/packages/")
-;;             t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+;; Trying to improve performance from scattered tips ... these have
+;; not been researched very well
+(setq auto-window-vscroll nil)
+(setq gc-cons-threshold (* 10 1024 1024))
+(setq read-process-output-max (* 1024 1024))
+
+(use-package cider :ensure t :defer t
+  :config
+  (setq cider-repl-prompt-function 'cider-repl-prompt-abbreviated))
+(use-package company :ensure t)
+(use-package dap-mode :ensure t)
+(use-package lsp-mode :ensure t
+  :hook (clojure-mode clojurec-mode clojurescript-mode))
+(use-package smartparens :ensure t
+  :config (require 'smartparens-config))
+(use-package terraform-mode :ensure t)
+(use-package uniquify
+  :config (setq uniquify-buffer-name-style 'post-forward))
+(use-package whitespace :ensure t)
+;; (use-package whitespace-cleanup-mode :ensure t
+;;   :config (global-whitespace-cleanup-mode))
+(use-package yaml-mode :ensure t)
+
+(use-package flycheck-clj-kondo :ensure t)
+(use-package clojure-mode :ensure t
+  :config (require 'flycheck-clj-kondo))
+
+(show-paren-mode)
+(smartparens-global-mode)
+
+(setq column-number-mode t)
+(setq make-backup-files nil)
+
+(defun copy-selected-text (start end)
+  (interactive "r")
+    (if (use-region-p)
+        (let ((text (buffer-substring-no-properties start end)))
+          (shell-command (concat "echo '" text "' | clip.exe")))))
+
+;;;
+;;; The following have been transcribed from _Writing GNU Emacs
+;;; Extensions_.
+;;;
+
+(defadvice switch-to-buffer (before existing-buffer activate compile)
+  "When interactive, switch to existing buffers only, unless given a
+prefix arguemnt."
+  (interactive (list (read-buffer "Switch to buffer: "
+                                  (other-buffer)
+                                  (null current-prefix-arg)))))
+
+(defadvice switch-to-buffer-other-window
+  (before existing-buffer-other-window activate compile)
+  "When interactive, switch to existing buffers only, unless given a
+prefix arguemnt."
+  (interactive (list (read-buffer "Switch to buffer: "
+                                  (other-buffer)
+                                  (null current-prefix-arg)))))
+
+(defadvice switch-to-buffer-other-frame
+  (before existing-buffer-other-window activate compile)
+  "When interactive, switch to existing buffers only, unless given a
+prefix arguemnt."
+  (interactive (list (read-buffer "Switch to buffer: "
+                                  (other-buffer)
+                                  (null current-prefix-arg)))))
+
+;;;
+;;; Define our own wacky new elisp thingees
+;;;
+
+(defmacro save-emacs-state (&rest body)
+  "Combination of save-window-excursion, save-excursion, and
+save-restriction, as these are frequently used together."
+  `(save-window-excursion
+    (save-excursion
+      (save-restriction
+        ,@body))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(font-use-system-font t)
  '(package-selected-packages
-   '(company lsp-mode flycheck-clj-kondo flycheck-clojure clj-refactor yaml-mode yaml smartparens slime exec-path-from-shell evil cider))
- '(uniquify-buffer-name-style 'post-forward nil (uniquify)))
+   '(yaml-mode use-package terraform-mode smartparens flycheck-clj-kondo dap-mode company cider))
+ '(safe-local-variable-values
+   '((cider-clojure-cli-aliases . ":dev:dev/config:dbs:test")
+     (cider-clojure-cli-aliases . ":dev:dev/libs:dbs:test")
+     (cider-clojure-cli-aliases . ":dev:dbs:test")
+     (cider-clojure-cli-aliases . ":dev:dbs")))
+ '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
-
-(load-file "~/lib/emacsen/dot.emacs.el")
-
+ '(default ((t (:family "DejaVu Sans Mono" :foundry "PfEd" :slant normal :weight normal :height 143 :width normal)))))
+(put 'downcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
