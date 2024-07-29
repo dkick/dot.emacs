@@ -1,4 +1,5 @@
 (require 'package)
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
@@ -19,6 +20,7 @@
 (use-package dap-mode :ensure t)
 (use-package lsp-mode :ensure t
   :hook (clojure-mode clojurec-mode clojurescript-mode))
+(use-package queue :ensure t)
 (use-package smartparens :ensure t
   :config (require 'smartparens-config))
 (use-package terraform-mode :ensure t)
@@ -98,13 +100,12 @@ save-restriction, as these are frequently used together."
    '((cider-clojure-cli-aliases . ":dev:dev/config:dbs:test")
      (cider-clojure-cli-aliases . ":dev:dev/libs:dbs:test")
      (cider-clojure-cli-aliases . ":dev:dbs:test")
-     (cider-clojure-cli-aliases . ":dev:dbs")))
- '(show-paren-mode t))
+     (cider-clojure-cli-aliases . ":dev:dbs"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "PfEd" :slant normal :weight normal :height 143 :width normal)))))
+ '(default ((t (:family "PT Mono" :foundry "nil" :slant normal :weight regular :height 140 :width normal)))))
 (put 'downcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
