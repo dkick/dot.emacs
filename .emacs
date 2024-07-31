@@ -1,5 +1,4 @@
 (require 'package)
-(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
@@ -9,10 +8,16 @@
 
 ;; Trying to improve performance from scattered tips ... these have
 ;; not been researched very well
-(setq auto-window-vscroll nil)
-(setq gc-cons-threshold (* 10 1024 1024))
-(setq read-process-output-max (* 1024 1024))
+;; (setq auto-window-vscroll nil)
+;; (setq gc-cons-threshold (* 10 1024 1024))
+;; (setq read-process-output-max (* 1024 1024))
 
+(use-package exec-path-from-shell :ensure t
+  :if (memq window-system '(mac ns x))
+  :config (exec-path-from-shell-initialize))
+
+;;(use-package auto-dark :ensure t
+;;  :config (auto-dark-mode t))
 (use-package cider :ensure t :defer t
   :config
   (setq cider-repl-prompt-function 'cider-repl-prompt-abbreviated))
@@ -20,7 +25,6 @@
 (use-package dap-mode :ensure t)
 (use-package lsp-mode :ensure t
   :hook (clojure-mode clojurec-mode clojurescript-mode))
-(use-package queue :ensure t)
 (use-package smartparens :ensure t
   :config (require 'smartparens-config))
 (use-package terraform-mode :ensure t)
@@ -29,6 +33,7 @@
 (use-package whitespace :ensure t)
 ;; (use-package whitespace-cleanup-mode :ensure t
 ;;   :config (global-whitespace-cleanup-mode))
+(use-package yasnippet :ensure t)
 (use-package yaml-mode :ensure t)
 
 (use-package flycheck-clj-kondo :ensure t)
@@ -95,7 +100,7 @@ save-restriction, as these are frequently used together."
  '(column-number-mode t)
  '(font-use-system-font t)
  '(package-selected-packages
-   '(yaml-mode use-package terraform-mode smartparens flycheck-clj-kondo dap-mode company cider))
+   '(auto-dark yasnippet yaml-mode use-package terraform-mode smartparens flycheck-clj-kondo dap-mode company cider))
  '(safe-local-variable-values
    '((cider-clojure-cli-aliases . ":dev:dev/config:dbs:test")
      (cider-clojure-cli-aliases . ":dev:dev/libs:dbs:test")
