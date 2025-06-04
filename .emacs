@@ -20,11 +20,13 @@
 ;;  :config (auto-dark-mode t))
 (use-package cider :ensure t :defer t
   :config
-  (setq cider-repl-prompt-function 'cider-repl-prompt-abbreviated))
+  (setq cider-repl-prompt-function 'cider-repl-prompt-abbreviated)
+  (setq cider-clojure-cli-global-aliases ":user"))
 (use-package company :ensure t)
 (use-package dap-mode :ensure t)
 (use-package lsp-mode :ensure t
   :hook (clojure-mode clojurec-mode clojurescript-mode))
+(use-package revbufs :ensure t)
 (use-package smartparens :ensure t
   :config (require 'smartparens-config))
 (use-package terraform-mode :ensure t)
@@ -35,10 +37,14 @@
 ;;   :config (global-whitespace-cleanup-mode))
 (use-package yasnippet :ensure t)
 (use-package yaml-mode :ensure t)
+(use-package zprint-format :ensure t)
 
+(use-package flycheck :ensure t)
 (use-package flycheck-clj-kondo :ensure t)
 (use-package clojure-mode :ensure t
   :config (require 'flycheck-clj-kondo))
+
+(global-auto-revert-mode)
 
 (show-paren-mode)
 (smartparens-global-mode)
@@ -100,9 +106,12 @@ save-restriction, as these are frequently used together."
  '(column-number-mode t)
  '(font-use-system-font t)
  '(package-selected-packages
-   '(auto-dark yasnippet yaml-mode use-package terraform-mode smartparens flycheck-clj-kondo dap-mode company cider))
+   '(auto-dark cider company dap-mode flycheck-clj-kondo revbufs
+	       smartparens terraform-mode use-package yaml-mode
+	       yasnippet zprint zprint-format))
  '(safe-local-variable-values
-   '((cider-clojure-cli-aliases . ":dev:dev/config:dbs:test")
+   '((eval progn (define-clojure-indent (try-step 1)))
+     (cider-clojure-cli-aliases . ":dev:dev/config:dbs:test")
      (cider-clojure-cli-aliases . ":dev:dev/libs:dbs:test")
      (cider-clojure-cli-aliases . ":dev:dbs:test")
      (cider-clojure-cli-aliases . ":dev:dbs"))))
