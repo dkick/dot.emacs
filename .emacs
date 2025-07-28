@@ -105,10 +105,7 @@ save-restriction, as these are frequently used together."
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(font-use-system-font t)
- '(package-selected-packages
-   '(auto-dark cider company dap-mode flycheck-clj-kondo revbufs
-	       smartparens terraform-mode use-package yaml-mode
-	       yasnippet zprint zprint-format))
+ '(package-selected-packages nil)
  '(safe-local-variable-values
    '((eval progn (define-clojure-indent (try-step 1)))
      (cider-clojure-cli-aliases . ":dev:dev/config:dbs:test")
